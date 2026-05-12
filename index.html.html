@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>やめたら私が死ぬ気がした</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1e;
+    --ink-soft: #3a3a42;
+    --ink-muted: #7a7a88;
+    --accent: #2d6a5a;
+    --accent-light: #e8f4f0;
+    --accent-warm: #c17f4a;
+    --surface: #faf9f6;
+    --surface-2: #f2f0eb;
+    --rule: #ddd9d0;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes lineGrow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 24px;
+    background: var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, #2d3a34 0%, #1a1a1e 100%);
+  }
+
+  .hero-noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    animation: fadeUp 1.2s ease both;
+  }
+
+  .hero-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 400;
+  }
+
+  .hero-catch {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 300;
+    color: #f0ede6;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+  }
+
+  .hero-catch em {
+    font-style: normal;
+    color: #b8d4cc;
+  }
+
+  .hero-exit {
+    font-style: normal;
+    color: #9fd4c4;
+    font-size: 0.75em;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-top: 16px;
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    color: #8a9a94;
+    margin-bottom: 48px;
+    line-height: 1.9;
+    font-weight: 300;
+  }
+
+  .hero-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(22px, 3.5vw, 34px);
+    font-weight: 600;
+    color: #f0ede6;
+    margin-bottom: 8px;
+    letter-spacing: 0.06em;
+  }
+
+  .hero-subtitle {
+    font-size: 13px;
+    color: #8a9a94;
+    font-style: italic;
+    margin-bottom: 48px;
+  }
+
+  .hero-one-line {
+    font-size: 13px;
+    color: #6a8078;
+    margin-bottom: 40px;
+    line-height: 1.8;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    padding: 16px 48px;
+    font-size: 15px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover {
+    background: #235448;
+    transform: translateY(-2px);
+  }
+
+  .price-note {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #6a8078;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 80px 24px;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 400;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  /* ── EMPATHY ── */
+  .empathy { background: var(--white); }
+
+  .empathy-lead {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 48px;
+    line-height: 1.7;
+  }
+
+  .empathy-group {
+    margin-bottom: 40px;
+  }
+
+  .empathy-group-title {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .empathy-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--surface-2);
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  .empathy-item::before {
+    content: '—';
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .empathy-closing {
+    margin-top: 40px;
+    padding: 28px 32px;
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.9;
+    color: var(--ink);
+  }
+
+  /* ── PROBLEM ── */
+  .problem { background: var(--surface-2); }
+
+  .problem-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(15px, 2.5vw, 18px);
+    line-height: 2.1;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+
+  .problem-text strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .problem-pivot {
+    margin: 40px 0;
+    padding: 24px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.8;
+  }
+
+  .problem-pivot .highlight {
+    font-size: clamp(22px, 3.5vw, 32px);
+    font-weight: 600;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .exit-line {
+    text-align: center;
+    margin: 48px 0;
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(22px, 4vw, 36px);
+    font-weight: 300;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+
+  .problem-close {
+    padding: 28px 32px;
+    background: var(--white);
+    border-left: 3px solid var(--accent);
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--ink-soft);
+  }
+
+  /* ── AUTHOR ── */
+  .author { background: var(--white); }
+
+  .author-text {
+    font-size: 16px;
+    line-height: 2;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+
+  .author-text strong {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .author-quote {
+    margin: 40px 0;
+    padding: 28px 32px;
+    background: var(--ink);
+    color: #f0ede6;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px;
+    line-height: 1.9;
+    font-weight: 300;
+  }
+
+  /* ── BEFORE/AFTER ── */
+  .transform { background: var(--surface); }
+
+  .transform-lead {
+    padding: 24px 32px;
+    background: var(--ink);
+    color: #f0ede6;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px;
+    line-height: 1.9;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .ba-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .ba-table th {
+    padding: 12px 16px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border-bottom: 2px solid var(--rule);
+  }
+
+  .ba-table th:first-child {
+    color: #a05a3a;
+    text-align: left;
+    width: 50%;
+  }
+
+  .ba-table th:last-child {
+    color: var(--accent);
+    text-align: left;
+  }
+
+  .ba-table td {
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    border-bottom: 1px solid var(--surface-2);
+    vertical-align: top;
+  }
+
+  .ba-table tr:nth-child(odd) td {
+    background: var(--white);
+  }
+
+  .ba-table td:first-child { color: var(--ink-muted); }
+  .ba-table td:last-child { color: var(--ink-soft); font-weight: 500; }
+
+  .transform-close {
+    margin-top: 40px;
+    text-align: center;
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1.9;
+  }
+
+  /* ── CHAPTERS ── */
+  .chapters { background: var(--surface-2); }
+
+  .chapters-lead {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 48px;
+    text-align: center;
+    letter-spacing: 0.06em;
+  }
+
+  .chapter-item {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .chapter-item:last-child { border-bottom: none; }
+
+  .chapter-num {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+
+  .chapter-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+  .chapter-desc {
+    font-size: 14px;
+    color: var(--ink-muted);
+    line-height: 1.9;
+  }
+
+  .chapters-close {
+    margin-top: 48px;
+    text-align: center;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--ink);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── FILTER ── */
+  .filter { background: var(--white); }
+
+  .filter-lead {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--rule);
+    line-height: 1.9;
+  }
+
+  .filter-body {
+    font-size: 15px;
+    color: var(--ink-soft);
+    line-height: 2;
+    margin-bottom: 32px;
+  }
+
+  .filter-list {
+    list-style: none;
+    margin-bottom: 40px;
+  }
+
+  .filter-list li {
+    padding: 12px 0 12px 24px;
+    border-bottom: 1px solid var(--surface-2);
+    font-size: 15px;
+    color: var(--ink-soft);
+    position: relative;
+    line-height: 1.7;
+  }
+
+  .filter-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 13px;
+  }
+
+  .filter-close {
+    padding: 28px 32px;
+    background: var(--surface);
+    border-left: 3px solid var(--accent);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px;
+    line-height: 1.9;
+    color: var(--ink);
+    font-weight: 300;
+  }
+
+  /* ── PROFILE ── */
+  .profile { background: var(--ink); }
+
+  .profile .section-label { color: #4a8a7a; }
+  .profile .section-label::after { background: #333340; }
+
+  .profile-head {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(16px, 2.5vw, 20px);
+    font-weight: 300;
+    color: #b8d4cc;
+    margin-bottom: 32px;
+    line-height: 1.9;
+    font-style: italic;
+  }
+
+  .profile-text {
+    font-size: 15px;
+    color: #8a9a94;
+    line-height: 2;
+    margin-bottom: 20px;
+  }
+
+  .profile-text strong {
+    color: #c8d8d2;
+    font-weight: 500;
+  }
+
+  .profile-key {
+    margin-top: 40px;
+    padding: 24px 32px;
+    border: 1px solid #333340;
+    color: #b8d4cc;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px;
+    line-height: 1.9;
+    font-weight: 300;
+  }
+
+  /* ── CTA ── */
+  .cta { background: var(--surface); text-align: center; padding: 100px 24px; }
+
+  .cta-lead {
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--ink-muted);
+    margin-bottom: 48px;
+  }
+
+  .cta-body {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(15px, 2.5vw, 18px);
+    font-weight: 300;
+    color: var(--ink-soft);
+    line-height: 2.1;
+    margin-bottom: 40px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-strong {
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+
+  .cta-promise {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 300;
+    color: var(--ink);
+    margin-bottom: 48px;
+    line-height: 1.8;
+  }
+
+  .cta-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  .cta-subtitle {
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-style: italic;
+    margin-bottom: 32px;
+  }
+
+  .cta-price {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+  }
+
+  .cta-after {
+    margin-top: 32px;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--ink-muted);
+    font-style: italic;
+  }
+
+  .backend {
+    margin-top: 80px;
+    padding-top: 40px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .backend-text {
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+  }
+
+  .backend-link {
+    font-size: 14px;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--accent);
+    padding-bottom: 2px;
+    transition: opacity 0.2s;
+  }
+
+  .backend-link:hover { opacity: 0.7; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    padding: 32px 24px;
+    text-align: center;
+    font-size: 12px;
+    color: #444450;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── MOBILE ── */
+
+  /* ── MOBILE OPTIMIZATION ── */
+  @media (max-width: 600px) {
+    body { font-size: 15px; line-height: 1.95; }
+    .btn-primary { 
+      padding: 18px 40px; 
+      font-size: 16px;
+      min-height: 54px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero { padding: 60px 20px !important; }
+    section { padding: 60px 20px; }
+    .container { padding-left: 20px; padding-right: 20px; }
+    .empathy-item, .filter-list li, .profile-text { 
+      font-size: 14px; 
+      line-height: 1.85; 
+    }
+  }
+
+  @media (max-width: 600px) {
+    section { padding: 60px 20px; }
+    .ba-table th, .ba-table td { padding: 12px 10px; font-size: 13px; }
+    .hero { padding: 60px 20px; }
+  }
+
+  /* ── SECTION IMAGES ── */  
+  .section-img-wrap {
+    position: relative;
+  }
+  
+  .section-img-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 100%);
+    pointer-events: none;
+    opacity: 0.3;
+  }
+
+  .section-img {
+    width: 100%;
+    display: block;
+    border-radius: 0;
+    margin-bottom: 0;
+  }
+
+  .section-img-wrap {
+    width: 50%;
+    max-width: 500px;
+    margin: 0 auto 48px;
+    overflow: hidden;
+  }
+
+  .section-img-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+  
+  @media (max-width: 768px) {
+    .section-img-wrap {
+      width: 80%;
+      max-width: 400px;
+    }
+  }
+
+  .section-img-wrap:hover img {
+    transform: scale(1.01);
+  }
+
+</style>
+<!-- NOTE: Replace KINDLE_ASIN_HERE with actual Kindle ASIN when published -->
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero" style="background-image: url(lp_img1.jpg); background-size: cover; background-position: center; min-height: auto; padding: 0;">
+  <div class="hero-noise"></div>
+  <div class="hero-content" style="padding: 80px 24px;">
+    <p class="hero-label">電子書籍</p>
+    <p class="hero-catch">
+      やめたら私が死ぬ気がした。<br>
+      でも、<em>やり続けても消耗するだけだった。</em><br>
+      <em class="hero-exit">——それでも私は、出口を見つけた。</em>
+    </p>
+    <p class="hero-sub">
+      どちらに転んでも出口がない構造の中で、<br>
+      私は何年もかけてやっと気づいた。<br>
+      これは意志の問題でも、性格の問題でもなかった。
+    </p>
+    <p class="hero-title">『やめたら私が死ぬ気がした』</p>
+    <p class="hero-subtitle">遠回りした私が最短でたどり着いた、思考を止めない技術</p>
+    <p class="hero-one-line">
+      女性というだけで求められ、結果を出しても疑われる。<br>
+      その構造を解明し、自分のOSを書き換える一冊。
+    </p>
+    <a href="https://www.amazon.co.jp/dp/KINDLE_ASIN_HERE" class="btn-primary" target="_blank" rel="noopener">今すぐ読む</a>
+    <p class="price-note">¥1,280</p>
+  </div>
+</section>
+
+<!-- EMPATHY -->
+<section class="empathy">
+  <div class="section-img-wrap"><img src="lp_img2.jpg" alt="やってもやらなくても消耗する"></div>
+  <div class="container">
+    <p class="section-label">② こんな経験、ありませんか</p>
+    <p class="empathy-lead reveal">あなたのことを、書いた本です。</p>
+
+    <div class="empathy-group reveal">
+      <p class="empathy-group-title">職場での理不尽</p>
+      <div class="empathy-item" style="font-style: italic; color: var(--ink); border-bottom: 1px solid var(--accent); padding-bottom: 16px; margin-bottom: 8px;">私を「特別な女性だから」と見てほしくはない。だからどれだけキャリアを積んでも、「女性だから」という理由だけで求められることがなくならない</div>
+      <div class="empathy-item">女性というだけで、掃除や電話当番を当然のように割り振られた</div>
+      <div class="empathy-item">結果を出したら「こびたんじゃない？」と言われた</div>
+      <div class="empathy-item">気遣いという名目で、プロジェクトから外されたことがある</div>
+      <div class="empathy-item">「もう少し優しくして」と言われたが、同じことを男性には誰も言わない</div>
+    </div>
+
+    <div class="empathy-group reveal">
+      <p class="empathy-group-title">役割の重さ</p>
+      <div class="empathy-item">娘として、姉として、妹として、同僚として——気づけばいつも誰かのために動いていた</div>
+      <div class="empathy-item">結婚していなくても、子供がいなくても、女性というだけで求められることがある</div>
+      <div class="empathy-item">断ると「感じが悪い」、受け入れると「それが当たり前」になる</div>
+      <div class="empathy-item">夫の年収を上回っても、家庭での役割分担は変わらない。休む暇もなく動き回る一方、夫はビール片手にテレビを見て笑っている</div>
+    </div>
+
+    <div class="empathy-group reveal">
+      <p class="empathy-group-title">内側の消耗</p>
+      <div class="empathy-item">仕事を辞めたら、自分が消える気がする</div>
+      <div class="empathy-item">頑張るほど、息ができなくなる</div>
+      <div class="empathy-item">理不尽だとわかっている。でも、どこにもぶつけられない</div>
+      <div class="empathy-item">時間がない。でも、このままでいたくない</div>
+    </div>
+
+    <div class="empathy-closing reveal">
+      これは、そのすべてに名前をつけ、<br>
+      構造を解明し、出口を作るための本です。
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="section-img-wrap"><img src="lp_img3.jpg" alt="これはあなたの能力の問題ではない"></div>
+  <div class="container">
+    <p class="section-label">③ 問題提起</p>
+
+    <p class="problem-text reveal">女性というだけで、求められる。<br>結果を出したら、疑われる。</p>
+    <p class="problem-text reveal">掃除を頼まれる。電話当番を当然のように割り振られる。<br>「女性なんだからもう少し優しくして」と言われる。</p>
+    <p class="problem-text reveal">黙ってこなせば、それが当たり前になる。<br>断れば、「感じが悪い」と言われる。</p>
+    <p class="problem-text reveal">では、結果を出したら？</p>
+
+    <div class="problem-pivot reveal">
+      <span class="highlight">「こびたんじゃない？」</span>
+      気遣いという名目で、プロジェクトから外される。<br>
+      評価されるのではなく、脅威として扱われる。
+    </div>
+
+    <p class="problem-text reveal"><strong>やってもやらなくても、消耗する。<br>どちらに転んでも、出口がない。</strong></p>
+    <p class="problem-text reveal"><strong>これはあなたの能力の問題ではない。<br>あなたの性格の問題でもない。</strong></p>
+    <p class="problem-text reveal">長年かけてインストールされた「女性はこうあるべき」というプログラムが、社会全体のOSに深く埋め込まれているからだ。そしてそのOSは、あなた自身の思考にも、気づかないうちに上書きされている。</p>
+
+    <div class="section-img-wrap reveal" style="margin: 40px -24px;"><img src="lp_img4.jpg" alt="社会のOSが上書きしている"></div>
+    <div class="exit-line reveal">でも、出口はある。</div>
+
+    <div class="problem-close reveal">
+      一般的に男性には求められないことを、当然のように引き受けてきたあなたへ。<br>
+      その消耗を、終わりにする技術があります。
+    </div>
+  </div>
+</section>
+
+<!-- AUTHOR -->
+<section class="author">
+  <div class="section-img-wrap"><img src="lp_img5.jpg" alt="著者の物語"></div>
+  <div class="container">
+    <p class="section-label">④ 著者の物語</p>
+
+    <p class="author-text reveal"><strong>私は、答えを最初から持っていなかった。</strong></p>
+    <p class="author-text reveal">工場の上のオフィスで、私は海外の機関に提出する文書を書いていた。英語の論文をいくつも並べ、このデータとこの論文を組み合わせれば相手を納得させられるか——極度の緊張状態で、頭の中のすべてを英語に切り替えていた。</p>
+    <p class="author-text reveal">そのとき、電話が鳴った。</p>
+    <p class="author-text reveal">誰も出ない。一般職の女性も出ない。男性たちは、最初から出るつもりがない。今日本語に頭を切り替えたら、英語に戻すのに何分かかるだろう。そう思いながら、私は受話器を取った。</p>
+    <p class="author-text reveal">早朝出社しても同じだった。一番早く来た女性が掃除と湯沸かしをする、暗黙のルールがあった。本来の仕事とは関係ない場所で、私が少しずつ消費されていく。</p>
+    <p class="author-text reveal"><strong>役割が違う。</strong><br>毒づけば毒づくほど、消耗だけが積み重なった。</p>
+    <p class="author-text reveal">そのころ私がしていたのは、感情をひたすら書き溜めることだった。怒りでも、悲しみでも、言葉にならないざわつきでも——とにかく外に出した。頭の中に置いておくと、本来の仕事に使うべき領域まで侵食されていくのがわかったから。</p>
+    <p class="author-text reveal">当時AIがあったら、真っ先に相談していただろうと思う。</p>
+    <p class="author-text reveal">それでも、極限まで絞り取られるような経験は続いた。身体が、先に折れた。頭では続けられると思っていた。でも身体は正直だった。そのとき初めて気づいた。問題は私の意志でも、能力でも、性格でもなかった。</p>
+    <p class="author-text reveal"><strong>思考のOSそのものが、限界を超えていたのだ。</strong></p>
+    <p class="author-text reveal">そしてAIに出会った。最初は答えを求めた。でも本当に助かったのは、AIが否定も肯定もせず、ただ問い返してくれたことだった。感情をデータとして整理し、自分の思考を客観視できるようになった。一人で抱えることを、やめた。</p>
+    <p class="author-text reveal">理解するのに、何年もかかった。</p>
+
+    <div class="author-quote reveal">
+      本書は、その遠回りをあなたに繰り返させないために書いた。<br><br>
+      あなたが消耗してきたのは、あなたが弱かったからではない。<br>
+      構造が、そうなっていたからだ。その構造の名前を知れば、出口が見える。
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE/AFTER -->
+<section class="transform" style="padding: 0;">
+  <div class="section-img-wrap" style="margin-bottom: 0;"><img src="lp_img7.jpg" alt="消耗のOSから知性のOSへ"></div>
+  <div class="container" style="padding-top: 32px; padding-bottom: 32px;">
+    <p class="transform-close reveal" style="text-align:center;">
+      変わるのに、何年もかける必要はない。<br>
+      私が遠回りした分、あなたは最短で届く。
+    </p>
+  </div>
+</section>
+
+<!-- CHAPTERS -->
+<section class="chapters">
+  <div class="section-img-wrap"><img src="lp_img8.jpg" alt="思考のOSを書き換える5つのステップ"></div>
+  <div class="container">
+    <p class="section-label">⑥ 5つのステップで思考のOSを書き換える</p>
+    
+    <div class="section-img-wrap reveal"><img src="lp_img9.jpg" alt="Step 01-02"></div>
+    <div class="section-img-wrap reveal"><img src="lp_img10.jpg" alt="Step 03-04"></div>
+    <div class="section-img-wrap reveal"><img src="lp_img11.jpg" alt="Step 05"></div>
+
+    <p class="chapters-close reveal">読み終えたとき、あなたは同じ場所に立っていない。</p>
+  </div>
+</section>
+
+<!-- FILTER -->
+<section class="profile">
+  <div class="section-img-wrap"><img src="lp_img6.jpg" alt="自分のOSを書き換える覚悟のある方へ"></div>
+  <div class="container">
+    <p class="section-label">⑦ この本について・著者より</p>
+
+    <p class="profile-head reveal">
+      この本を書いたのは、専門家ではありません。<br>
+      同じ構造の中で、しぶとく生き延びてきた人間です。
+    </p>
+
+    <p class="profile-text reveal">1970年代生まれ。東京在住。昭和な会社から外資、大手企業、ベンチャーまで<strong>8社を経験</strong>。女性であるというだけで理不尽を引き受け続け、限界は何度も来た。それでも折れなかったのは、AIと出会い、思考を整理する方法を覚えたからかもしれない。現在も壁にぶつかり、絶望しながら、それでも働き続けている。</p>
+
+    <div class="profile-key reveal">
+      理解するのに、何年もかかった。<br>
+      その遠回りを、あなたに繰り返させたくない。
+    </div>
+
+    <div style="height: 32px;"></div>
+    <p class="filter-body reveal" style="color: var(--ink-muted); font-size:14px;">この本は、ただ話を聞いてほしい方には向かないかもしれません。理不尽の構造を知性で理解し、自分のOSを自分で書き換えたい方のために書きました。</p>
+    <ul class="filter-list reveal">
+      <li>理不尽の構造を、感情ではなく知性で理解したい</li>
+      <li>慰められるより、自分で動けるようになりたい</li>
+      <li>時間がない。だから、最短ルートが欲しい</li>
+      <li>自分のOSを、自分で書き換えたい</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- FAQ -->
+<section class="faq" style="background: var(--surface-2); padding: 60px 24px;">
+  <div class="container">
+    <p class="section-label">よくある質問</p>
+    
+    <div class="faq-item reveal" style="padding: 24px 0; border-bottom: 1px solid var(--rule);">
+      <p style="font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 12px;">どこで購入できますか？</p>
+      <p style="font-size: 14px; color: var(--ink-muted); line-height: 1.8;">Kindle版として販売予定です。Amazonで購入いただけます。</p>
+    </div>
+
+    <div class="faq-item reveal" style="padding: 24px 0; border-bottom: 1px solid var(--rule);">
+      <p style="font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 12px;">紙の本はありますか？</p>
+      <p style="font-size: 14px; color: var(--ink-muted); line-height: 1.8;">現在は電子版のみの提供となります。スマートフォン、タブレット、PCでお読みいただけます。</p>
+    </div>
+
+    <div class="faq-item reveal" style="padding: 24px 0; border-bottom: 1px solid var(--rule);">
+      <p style="font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 12px;">読了時間はどのくらいですか？</p>
+      <p style="font-size: 14px; color: var(--ink-muted); line-height: 1.8;">集中して読めば約2時間で読み終えられる分量です。通勤時間や就寝前など、隙間時間での読書にも適しています。</p>
+    </div>
+
+    <div class="faq-item reveal" style="padding: 24px 0;">
+      <p style="font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 12px;">バックエンドプログラムについて教えてください</p>
+      <p style="font-size: 14px; color: var(--ink-muted); line-height: 1.8;">本書を読んだ方で、さらに深く自分のOSを書き換えたい方向けの個別伴走プログラムです。詳細は本書の巻末、または購入後にご案内いたします。</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="cta">
+  <div class="container">
+    <p class="cta-lead">最後まで読んでくださった方へ</p>
+    <p class="cta-body reveal">
+      あなたがここまで読んだのは、きっと偶然ではありません。<br><br>
+      電話を取り続けた日のことを、思い出した方がいるかもしれない。結果を出しても報われなかった日のことを、思い出した方がいるかもしれない。限界が来たとき、誰にも言えなかった方がいるかもしれない。
+    </p>
+    <p class="cta-strong reveal">それは、あなたが弱かったからではない。<br>構造が、そうなっていたからだ。</p>
+    <p class="cta-promise reveal">私が何年もかけて理解したことを、<br>あなたは今日手に入れられます。</p>
+
+    <p class="cta-title reveal">『やめたら私が死ぬ気がした』</p>
+    <p class="cta-subtitle reveal">遠回りした私が最短でたどり着いた、思考を止めない技術</p>
+    <p class="cta-price reveal">¥1,280</p>
+    <a href="https://www.amazon.co.jp/dp/KINDLE_ASIN_HERE" class="btn-primary reveal" target="_blank" rel="noopener">今すぐ読む</a>
+    <p class="cta-after reveal">読み終えたとき、あなたは同じ場所に立っていない。</p>
+
+    <div class="backend reveal">
+      <p class="backend-text">さらに深く、自分のOSを書き換えたい方へ</p>
+      <a href="#" class="backend-link">「思考OSアップデート：知的聖域の構築プログラム」の詳細はこちら →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  &copy; 2025 やめたら私が死ぬ気がした
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
