@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta name="robots" content="noindex, nofollow"> <meta charset="UTF-8">
-  
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>やめたら私が死ぬ気がした</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
@@ -662,6 +661,27 @@
   }
 
   /* ── MOBILE ── */
+
+  /* ── MOBILE OPTIMIZATION ── */
+  @media (max-width: 600px) {
+    body { font-size: 15px; line-height: 1.95; }
+    .btn-primary { 
+      padding: 18px 40px; 
+      font-size: 16px;
+      min-height: 54px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero { padding: 60px 20px !important; }
+    section { padding: 60px 20px; }
+    .container { padding-left: 20px; padding-right: 20px; }
+    .empathy-item, .filter-list li, .profile-text { 
+      font-size: 14px; 
+      line-height: 1.85; 
+    }
+  }
+
   @media (max-width: 600px) {
     section { padding: 60px 20px; }
     .ba-table th, .ba-table td { padding: 12px 10px; font-size: 13px; }
@@ -690,9 +710,10 @@
   }
 
   .section-img-wrap {
-    width: 100%;
+    width: 50%;
+    max-width: 500px;
+    margin: 0 auto 48px;
     overflow: hidden;
-    margin-bottom: 48px;
   }
 
   .section-img-wrap img {
@@ -701,12 +722,20 @@
     display: block;
     transition: transform 0.6s ease;
   }
+  
+  @media (max-width: 768px) {
+    .section-img-wrap {
+      width: 80%;
+      max-width: 400px;
+    }
+  }
 
   .section-img-wrap:hover img {
     transform: scale(1.01);
   }
 
 </style>
+<!-- NOTE: Replace KINDLE_ASIN_HERE with actual Kindle ASIN when published -->
 </head>
 <body>
 
@@ -731,7 +760,7 @@
       女性というだけで求められ、結果を出しても疑われる。<br>
       その構造を解明し、自分のOSを書き換える一冊。
     </p>
-    <a href="#cta" class="btn-primary">今すぐ読む</a>
+    <a href="https://www.amazon.co.jp/dp/KINDLE_ASIN_HERE" class="btn-primary" target="_blank" rel="noopener">今すぐ読む</a>
     <p class="price-note">¥1,280</p>
   </div>
 </section>
@@ -887,6 +916,35 @@
   </div>
 </section>
 
+
+<!-- FAQ -->
+<section class="faq" style="background: var(--surface-2); padding: 60px 24px;">
+  <div class="container">
+    <p class="section-label">よくある質問</p>
+    
+    <div class="faq-item reveal" style="padding: 24px 0; border-bottom: 1px solid var(--rule);">
+      <p style="font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 12px;">どこで購入できますか？</p>
+      <p style="font-size: 14px; color: var(--ink-muted); line-height: 1.8;">Kindle版として販売予定です。Amazonで購入いただけます。</p>
+    </div>
+
+    <div class="faq-item reveal" style="padding: 24px 0; border-bottom: 1px solid var(--rule);">
+      <p style="font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 12px;">紙の本はありますか？</p>
+      <p style="font-size: 14px; color: var(--ink-muted); line-height: 1.8;">現在は電子版のみの提供となります。スマートフォン、タブレット、PCでお読みいただけます。</p>
+    </div>
+
+    <div class="faq-item reveal" style="padding: 24px 0; border-bottom: 1px solid var(--rule);">
+      <p style="font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 12px;">読了時間はどのくらいですか？</p>
+      <p style="font-size: 14px; color: var(--ink-muted); line-height: 1.8;">集中して読めば約2時間で読み終えられる分量です。通勤時間や就寝前など、隙間時間での読書にも適しています。</p>
+    </div>
+
+    <div class="faq-item reveal" style="padding: 24px 0;">
+      <p style="font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 12px;">バックエンドプログラムについて教えてください</p>
+      <p style="font-size: 14px; color: var(--ink-muted); line-height: 1.8;">本書を読んだ方で、さらに深く自分のOSを書き換えたい方向けの個別伴走プログラムです。詳細は本書の巻末、または購入後にご案内いたします。</p>
+    </div>
+
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="cta" id="cta">
   <div class="container">
@@ -901,7 +959,7 @@
     <p class="cta-title reveal">『やめたら私が死ぬ気がした』</p>
     <p class="cta-subtitle reveal">遠回りした私が最短でたどり着いた、思考を止めない技術</p>
     <p class="cta-price reveal">¥1,280</p>
-    <a href="#" class="btn-primary reveal">今すぐ読む</a>
+    <a href="https://www.amazon.co.jp/dp/KINDLE_ASIN_HERE" class="btn-primary reveal" target="_blank" rel="noopener">今すぐ読む</a>
     <p class="cta-after reveal">読み終えたとき、あなたは同じ場所に立っていない。</p>
 
     <div class="backend reveal">
